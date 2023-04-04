@@ -1,3 +1,6 @@
+//definir siempre com un componente de uso cliente, para poder usarlo desde el front
+'use client';
+
 /*
 en esta parte nos traeremos todos los componentes de NavBar, para crear
 nuestra barra de navaegacion, hacemos los estilos directamente,ya que tenemos
