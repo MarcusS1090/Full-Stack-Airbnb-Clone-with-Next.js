@@ -5,9 +5,13 @@ import { AiOutlineMenu } from 'react-icons/ai'
 import Avatar from "../Avatar";
 import { useCallback, useState } from 'react';
 import MenuItem from './MenuItem';
+import userRegisterModal from '@/app/hooks/userRegisterModal';
 
 
 const UserMenu = () => {
+    //con esto nostraemos desde hooks nuestro registerModal y sus funciones
+    const registerModal = userRegisterModal();
+
     //vamos a usar una funcion para usar algunos estados para la barra de usuario,para saber si se abre o no
     const [isOpen, setIsOpen] = useState(false);
 
@@ -83,7 +87,7 @@ const UserMenu = () => {
                                 label='Iniciar sesión'
                             />
                             <MenuItem
-                                onClick={() =>{}}
+                                onClick={(registerModal.onOpen)}
                                 label='Registrate'
                             />
                         </>
