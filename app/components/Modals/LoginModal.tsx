@@ -1,9 +1,11 @@
 'use client';
 
-import axios from 'axios';
+import { signIn } from 'next-auth/react';
 import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { useCallback, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import {
     FieldValues,
     SubmitHandler,
@@ -16,17 +18,17 @@ import useLoginModal from '@/app/hooks/useLoginModal';
 import Modal from './Modal';
 import Heading from '../Heading';
 import Input from '../Inputs/Input'
-import { toast } from 'react-hot-toast';
 import Button from '../Button';
-import { signIn } from 'next-auth/react';
 
-const RegisterModal = () => {
+
+const LoginModal = () => {
+    const router = useRouter();
     const registerModal = userRegisterModal();
     const loginModal = useLoginModal();
 
     //vamos a agregar nuestros estados del login, asi sabremos cuando esta abierto
     //o cerrado o si se envio la informacion bien o tenemos algun error
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsloading] = useState(false);
 
     //aqui vamos a poner nuestras propiedades de el formulario
     const {
@@ -37,7 +39,6 @@ const RegisterModal = () => {
         }
     } = useForm<FieldValues>({
         defaultValues: {
-            name:'',
             email:'',
             password:''
         }
@@ -45,40 +46,38 @@ const RegisterModal = () => {
 
     //aqui vamos a hacer nuestra funcion de enviar (Submit)
     const onSubmit: SubmitHandler<FieldValues> =(data) => {
-        setIsLoading(true);
+        setIsloading(true);
 
-        //aqui vamos a usar nuestro protocolo axios para registrar nuestos endpoint
-        //por ahora solo vamos a crear la UI pero aun asi vamos a usar axios post
-        axios.post('/api/register', data)
-        .then(() => {
-            toast.success("Registrado!");
-            registerModal.onClose();
+        //aqui vamos a crear nuestra funcion para conectarse a la cuenta y si tenemos un error
+        signIn('credentials', {
+            ...data,
+            redirect: false,
         })
-        .catch((error) => {
-            toast.error('Algo salío mal');
+        .then((callback) => {
+            setIsloading(false);
+
+            if (callback?.ok) {
+                toast.success("Iniciaste Sesion");
+                router.refresh();
+                loginModal.onClose();
+            }
+
+            if (callback?.error) {
+                toast.error(callback.error);   
+            }
         })
-        .finally(() => {
-            setIsLoading(false);
-        })
+        
     }
     //aqui vamos a crear nuestro contenido para el body del registro
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Heading
-                title='Bienvenido a Airbnb'
-                subtitle='crea una cuenta!'
+                title='Bienvenido de vuelta'
+                subtitle='Entra en tu cuenta!'
             />
             <Input 
                 id="email"
                 label='Correo Electronico'
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                required
-            />
-            <Input 
-                id="name"
-                label='Nombre'
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -103,7 +102,7 @@ const RegisterModal = () => {
                 outline
                 label='Continua con Google'
                 icon={FcGoogle}
-                onClick={() => signIn('google')}
+                onClick={() => {}}
             />
             <Button 
                 outline
@@ -111,35 +110,29 @@ const RegisterModal = () => {
                 icon={AiFillGithub}
                 onClick={() => signIn('github')}
             />
-            <div 
-                className="
-                    text-neutral-500
-                    text-center
-                    mt-4
-                    font-light
-                "
-            >
-                <p>¿Ya tienes una cuenta?
+            <div className="
+                text-neutral-500 text-center mt-4 font-light">
+                <p>¿Primera vez usando Airbnb?
                     <span 
-                        onClick={registerModal.onClose} 
+                        onClick={() => {}} 
                         className="
                         text-neutral-800
                         cursor-pointer 
                         hover:underline
                         "
-                        >Iniciar sesion</span>
+                    > Crear una cuenta</span>
                 </p>
             </div>
-        </div>    
+        </div>   
     )
 
     return (
         <Modal 
             disabled={isLoading}
-            isOpen={registerModal.isOpen}
-            title='Registrate'
+            isOpen={loginModal.isOpen}
+            title="Iniciar Sesion"
             actionLabel='Continue'
-            onClose={registerModal.onClose}
+            onClose={loginModal.onClose}
             onSubmit={handleSubmit(onSubmit)}
             body={bodyContent}
             footer={footerContent}
@@ -147,4 +140,4 @@ const RegisterModal = () => {
     )
 }
 
-export default RegisterModal;
+export default LoginModal;

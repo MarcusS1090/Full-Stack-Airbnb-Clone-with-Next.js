@@ -14,15 +14,15 @@ datasource db {
 //
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String?
-  email String? @unique
-  emailVerified DateTime?
-  image String?
-  hashedPassword String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  favoriteIds String[] @db.ObjectId
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  email           String?   @unique
+  emailVerified   DateTime?
+  image           String?
+  hashedPassword  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  favoriteIds     String[] @db.ObjectId
 
   //relaciones
   accounts Account[]
@@ -33,23 +33,22 @@ model User {
 //social login/ listen Modal
 model Account {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  type String
-  provider String
-  providerAccountId String
-  refresh_token String? @db.String
-  acces_token String? @db.String
-  expires_at Int?
-  token_type String?
-  scope String?
-  id_token String? @db.String
-  session_state String?
+  userId             String   @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.String
+  access_token       String?  @db.String
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.String
+  session_state      String?
 
   // completar las relaciones, con esta relacion user en fields para guardar el id
   // en userId en model account, el id que usa es del modal User id
   // el onDelete es para que pase todo lo del modal Account en cascada
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-   
   //necesitamos una combinacion unica que es diferente a los providers que nos dan
   //en el modal user 
   @@unique([provider, providerAccountId]) 
@@ -57,18 +56,18 @@ model Account {
 
 //Listen model
 model Listing {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  description String
-  imageSrc String
-  createdAt DateTime @default(now())
-  category String
-  roomCount Int
-  bathroomCount Int
-  guestCount Int
-  locationValue String
-  userId String @db.ObjectId
-  price Int
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String
+  imageSrc       String
+  createdAt      DateTime @default(now())
+  category       String
+  roomCount      Int
+  bathroomCount  Int
+  guestCount     Int
+  locationValue  String
+  userId         String @db.ObjectId
+  price          Int
 
   // completar las relaciones, con esta relacion user en fields para guardar el id
   // en userId en model account, el id que usa es del modal User id

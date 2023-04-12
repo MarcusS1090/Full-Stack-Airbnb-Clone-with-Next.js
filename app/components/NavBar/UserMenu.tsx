@@ -3,14 +3,24 @@
 
 import { AiOutlineMenu } from 'react-icons/ai'
 import Avatar from "../Avatar";
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import MenuItem from './MenuItem';
+
 import userRegisterModal from '@/app/hooks/userRegisterModal';
+import useLoginModal from '@/app/hooks/useLoginModal';
+import { User } from "@prisma/client";
+import { signOut } from 'next-auth/react';
 
+interface UserMenuProps {
+    currentUser?: User | null
+}
 
-const UserMenu = () => {
+const UserMenu: React.FC<UserMenuProps> = ({
+    currentUser
+}) => {
     //con esto nostraemos desde hooks nuestro registerModal y sus funciones
     const registerModal = userRegisterModal();
+    const loginModal = useLoginModal();
 
     //vamos a usar una funcion para usar algunos estados para la barra de usuario,para saber si se abre o no
     const [isOpen, setIsOpen] = useState(false);
@@ -80,17 +90,46 @@ const UserMenu = () => {
                         text-sm
                     "
                 >
-                    <div className="flex flex-col cursor-pointer">
-                        <>
-                            <MenuItem
-                                onClick={() =>{}}
-                                label='Iniciar sesión'
-                            />
-                            <MenuItem
-                                onClick={(registerModal.onOpen)}
-                                label='Registrate'
-                            />
-                        </>
+                    <div className='flex flex-col cursor-pointer'>
+                        {currentUser ? (
+                            <>
+                                <MenuItem
+                                    onClick={() => {}}
+                                    label='Mis Viajes'
+                                />
+                                <MenuItem 
+                                    onClick={() => {}}
+                                    label='Mis Favoritos'
+                                />
+                                <MenuItem 
+                                    onClick={() => {}}
+                                    label='Mis Reservaciones'
+                                />
+                                <MenuItem 
+                                    onClick={() => {}}
+                                    label='Mis Propiedades'
+                                />
+                                <MenuItem 
+                                    onClick={() => {}}
+                                    label='mi Hogar Airbnb'
+                                />
+                                <hr />
+                                <MenuItem 
+                                    onClick={() => signOut}
+                                    label='Salir'
+                                />                            </>
+                        ) : (
+                            <>
+                                <MenuItem
+                                    onClick={loginModal.onOpen}
+                                    label='Iniciar sesion'
+                                />
+                                <MenuItem 
+                                    onClick={registerModal.onOpen}
+                                    label='Registrate'
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
             )}

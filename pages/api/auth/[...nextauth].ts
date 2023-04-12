@@ -1,11 +1,11 @@
 //aqui vamos a poner nuestra configuracion de nextauth
 
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import NextAuth, { AuthOptions } from "next-auth";
-import GitHubProvider from "next-auth/providers/github"
+import bcrypt from "bcrypt"
+import NextAuth, { AuthOptions } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
+import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
-import credetialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcrypt";
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
 
 import prisma from "@/app/libs/prismadb";
 
@@ -13,32 +13,32 @@ export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
     //aqui vamos a hacer un array para nuestros providers
     providers: [
-        GitHubProvider({
+        GithubProvider({
             clientId: process.env.GITHUB_ID as string,
-            clientSecret: process.env.GITHUB_SECRET as string,
+            clientSecret: process.env.GITHUB_SECRET as string
         }),
         GoogleProvider({
-            clientId: process.env.GOOGLE_ID as string,
-            clientSecret: process.env.GOOGLE_SECRET as string,
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
         }),
-        credetialsProvider({
+        CredentialsProvider({
             name: 'credentials',
             credentials: {
-                email: {label: 'Correo Electronico', type: 'text'},
-                password: {label: 'Contraseña', type: 'text'},
+            email: { label: 'email', type: 'text' },
+            password: { label: 'password', type: 'password' }
             },
             //si el usuario olvida su email o su contraseña entonces le saldra un
-            //error de que esta teniendo algun error en una de estas
+            //error de que esta teniendo algun error en una de esta
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
-                    throw new Error('Credenciales invalidas');
+                throw new Error('Invalid credentials');
                 }
                 // aqui mientras esperamos una authentificacion esperamos el usuario
                 // entonces en esta seccion le decimos que encuentre el usuario unico
                 // en este caso son las credenciales del email
                 const user = await prisma.user.findUnique({
                     where: {
-                        email: credentials.email
+                    email: credentials.email
                     }
                 });
                 // si el usuario no puede ser encontrado entonces hacemos una condicional
@@ -66,7 +66,7 @@ export const authOptions: AuthOptions = {
     // cuando cualquier error pase o si usamos algun callback sospechoso,
     // nos va a reedirigir a nuestra pagina principal
     pages: {
-        signIn:'/',
+        signIn: '/',
     },
     // con esto nos aseguramos que para hacer debug debamos estar en desarrollador
     // para ver errores
