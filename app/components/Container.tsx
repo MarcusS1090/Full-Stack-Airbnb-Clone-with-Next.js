@@ -20,7 +20,6 @@ interface ContainerProps {
       >
         {children}
       </div>
-     );
+    );
   }
-   
   export default Container;

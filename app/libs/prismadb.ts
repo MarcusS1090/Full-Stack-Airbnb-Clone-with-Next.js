@@ -1,16 +1,18 @@
-//aqui vamos a tener las funciones de prismadb
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "@prisma/client";
 
-//aqui importamos el cliente de prisma y le damos una definicion global de prisma
-//asi puede trabajar a lo largo de nuestro codigo
+/*
+    aqui importamos nuestro PrismaClient de forma global par poder trabajarlo a lo largo del codigo
+*/
 declare global {
     var prisma: PrismaClient | undefined
 }
 
-// esto hace una busqueda global en globalThis o puede crear un nuevo cliente global
-// luego creamos un condicional if para checar si no estamos en modo produccion
-//  si NODE.ENV no esta en produccion entonces pones el cliente global de prisma  
-const client = globalThis.prisma || new PrismaClient()
-if (process.env.NODE_ENV !== "production") globalThis.prisma = client
+/*
+aqui creamos una constante cliente para que nos muestre prisma de manera global
+o que nos cree un nuevo PrismaClient 
+*/
+const client = globalThis.prisma || new PrismaClient();
+//esta condicion nos sirve para ver que no estemos en produccion
+if (process.env.NODE_ENV !== 'production') globalThis.prisma = client
 
-export default client
+export default client;

@@ -18,22 +18,22 @@ const Search = () => {
                 cursor-pointer
             "
         >
-           <div
+        <div
                 className="
                     flex 
                     flex-row 
                     items-center 
                     justify-between
                 "
-           > 
+        > 
                 <div
-                   className="
+                    className="
                         text-sm
                         font-semibold
                         px-6
-                   " 
+                    " 
                 >
-                    En cualquier lugar del mundo
+                    Any where
                 </div>
                 <div
                     className="
@@ -47,7 +47,7 @@ const Search = () => {
                         text-center
                     "
                 >
-                    cualquier semana
+                    Any week
                 </div>
                 <div
                     className="
@@ -61,7 +61,7 @@ const Search = () => {
                         gap-3
                     "
                 >
-                    <div className="hiden sm:block">¿Cúantos?</div>
+                    <div className="hiden sm:block">How many?</div>
                     <div
                         className="
                             p-2 
@@ -73,7 +73,7 @@ const Search = () => {
                         <BiSearch size={18} />
                     </div>
                 </div>
-           </div>     
+        </div>     
         </div>
     )
 }

@@ -1,5 +1,4 @@
 //aqui vamos a poner nuestra configuracion de nextauth
-
 import bcrypt from "bcrypt"
 import NextAuth, { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
@@ -7,7 +6,7 @@ import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 
-import prisma from "@/app/libs/prismadb";
+import prisma from '@/app/libs/prismadb'
 
 export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
@@ -25,15 +24,15 @@ export const authOptions: AuthOptions = {
             name: 'credentials',
             credentials: {
             email: { label: 'email', type: 'text' },
-            password: { label: 'password', type: 'password' }
+            password: { label: 'password', type: 'password' },
             },
             //si el usuario olvida su email o su contraseña entonces le saldra un
             //error de que esta teniendo algun error en una de esta
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
-                throw new Error('Invalid credentials');
+                    throw new Error('Invalid credentials');
                 }
-                // aqui mientras esperamos una authentificacion esperamos el usuario
+                // aqui mientras esperamos una authentication esperamos el usuario
                 // entonces en esta seccion le decimos que encuentre el usuario unico
                 // en este caso son las credenciales del email
                 const user = await prisma.user.findUnique({
@@ -45,7 +44,7 @@ export const authOptions: AuthOptions = {
                 // si no hay usuario y si la contraseña no  coincide con el usuario entonces
                 // le pasamos un error
                 if (!user || !user?.hashedPassword) {
-                    throw new Error('Usuario Invalido');
+                    throw new Error('Invalid user');
                 }
 
                 // si la contraseña es correcta entonces 
@@ -55,8 +54,8 @@ export const authOptions: AuthOptions = {
                     user.hashedPassword
                 );
                 //aqui hacemos un pequeño condicional si la contraseña es incorrecta
-                if(!isCorrectPassword) {
-                    throw new Error('Contraseña incorrecta');
+                if (!isCorrectPassword) {
+                    throw new Error('Incorrect password');
                 }
 
                 return user;
@@ -70,12 +69,11 @@ export const authOptions: AuthOptions = {
     },
     // con esto nos aseguramos que para hacer debug debamos estar en desarrollador
     // para ver errores
-    debug: process.env.NODE_ENV === 'development' ,
-    //
+    debug: process.env.NODE_ENV === 'development',
     session: {
         strategy: "jwt"
     },
     secret: process.env.NEXTAUTH_SECRET,
-};
+}
 
 export default NextAuth(authOptions); 

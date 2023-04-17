@@ -10,7 +10,7 @@ import {
     useForm
 } from 'react-hook-form';
 
-import userRegisterModal from '@/app/hooks/userRegisterModal';
+import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 
 import Modal from './Modal';
@@ -19,9 +19,10 @@ import Input from '../Inputs/Input'
 import { toast } from 'react-hot-toast';
 import Button from '../Button';
 import { signIn } from 'next-auth/react';
+import LoginModal from './LoginModal';
 
 const RegisterModal = () => {
-    const registerModal = userRegisterModal();
+    const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
 
     //vamos a agregar nuestros estados del login, asi sabremos cuando esta abierto
@@ -65,12 +66,12 @@ const RegisterModal = () => {
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Heading
-                title='Bienvenido a Airbnb'
-                subtitle='crea una cuenta!'
+                title='Welcome to Airbnb'
+                subtitle='create an an account!'
             />
             <Input 
                 id="email"
-                label='Correo Electronico'
+                label='Email'
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -78,7 +79,7 @@ const RegisterModal = () => {
             />
             <Input 
                 id="name"
-                label='Nombre'
+                label='Name'
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -87,7 +88,7 @@ const RegisterModal = () => {
             <Input 
                 id="password"
                 type='password'
-                label='Contraseña'
+                label='Password'
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -101,13 +102,13 @@ const RegisterModal = () => {
             <hr />
             <Button 
                 outline
-                label='Continua con Google'
+                label='Continue con Google'
                 icon={FcGoogle}
                 onClick={() => signIn('google')}
             />
             <Button 
                 outline
-                label='Continua con GitHub'
+                label='Continue con GitHub'
                 icon={AiFillGithub}
                 onClick={() => signIn('github')}
             />
@@ -119,7 +120,7 @@ const RegisterModal = () => {
                     font-light
                 "
             >
-                <p>¿Ya tienes una cuenta?
+                <p>¿Already have an account?
                     <span 
                         onClick={registerModal.onClose} 
                         className="
@@ -127,7 +128,7 @@ const RegisterModal = () => {
                         cursor-pointer 
                         hover:underline
                         "
-                        >Iniciar sesion</span>
+                        >Log in</span>
                 </p>
             </div>
         </div>    
@@ -137,7 +138,7 @@ const RegisterModal = () => {
         <Modal 
             disabled={isLoading}
             isOpen={registerModal.isOpen}
-            title='Registrate'
+            title='Register'
             actionLabel='Continue'
             onClose={registerModal.onClose}
             onSubmit={handleSubmit(onSubmit)}

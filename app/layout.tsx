@@ -1,13 +1,16 @@
 import { Nunito } from "next/font/google";
-import  NavBar  from "./components/NavBar/NavBar";
+
+import './globals.css'
 
 //este es nuestro componente para arreglar el bug de el refresco de pagina
-import './globals.css'
 import ClientOnly from "./components/ClientOnly";
+import getCurrentUser from "./actions/getCurrentUser";
+
+import  NavBar  from "./components/NavBar/NavBar";
 import RegisterModal from "./components/Modals/RegisterModal";
 import LoginModal from "./components/Modals/LoginModal";
+
 import ToasterProvider from "./providers/ToasterProvider";
-import getCurrentUser from "./actions/getCurrentUser";
 
 
 export const metadata = {
@@ -25,17 +28,16 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const currentUser = await getCurrentUser();
-
   return (
     <html lang="en">
       <body className={font.className}>
         <ClientOnly>
           <ToasterProvider />
-          <RegisterModal />
           <LoginModal />
-          <NavBar currentUser = {currentUser} />
+          <RegisterModal />
+          <NavBar currentUser={currentUser} />
         </ClientOnly>
-        {children}  
+          {children}
       </body>
     </html>
   )

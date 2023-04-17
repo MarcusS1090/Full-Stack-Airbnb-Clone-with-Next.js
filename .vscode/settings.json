@@ -1,4 +1,26 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "cSpell.words": [
+    "algun",
+    "aqui",
+    "configuracion",
+    "contraseña",
+    "entonces",
+    "esperamos",
+    "esta",
+    "hacer",
+    "mientras",
+    "NEXTAUTH",
+    "nuestra",
+    "nuestros",
+    "olvida",
+    "poner",
+    "prismadb",
+    "saldra",
+    "seccion",
+    "teniendo",
+    "usuario",
+    "vamos"
+  ]
 }

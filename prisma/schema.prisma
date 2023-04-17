@@ -9,7 +9,6 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-
 //aqui vamos hacer el modelo de usario para la base de datos, a la hora del registro
 //
 
