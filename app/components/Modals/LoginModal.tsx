@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation';
 
 const LoginModal = () => {
     const router = useRouter();
+
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
 
@@ -68,6 +69,11 @@ const LoginModal = () => {
             }
         }) 
     }
+    //aqui vamos a hacer para cambiar entre login y register model2
+    const toggle = useCallback(() => {
+        loginModal.onClose();
+        registerModal.onOpen();
+    }, [loginModal, registerModal])
     //aqui vamos a crear nuestro contenido para el body del registro
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -118,15 +124,15 @@ const LoginModal = () => {
                     font-light
                 "
             >
-                <p>¿dont have an account?
+                <p>First time using Airbnb?
                     <span 
-                        onClick={registerModal.onOpen}
+                        onClick={toggle}
                         className="
                         text-neutral-800
                         cursor-pointer 
                         hover:underline
                         "
-                        >Register</span>
+                        >Create an account</span>
                 </p>
             </div>
         </div>    

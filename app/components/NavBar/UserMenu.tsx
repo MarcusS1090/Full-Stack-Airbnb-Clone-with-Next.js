@@ -5,11 +5,13 @@ import { AiOutlineMenu } from 'react-icons/ai'
 import Avatar from "../Avatar";
 import React, { useCallback, useState } from 'react';
 import MenuItem from './MenuItem';
+import { signOut } from 'next-auth/react';
+import { safeUser } from '@/app/types'
 
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
-import { signOut } from 'next-auth/react';
-import { safeUser } from '@/app/types'
+import useRentModal from '@/app/hooks/useRentModal';
+
 interface UserMenuProps {
     currentUser?: safeUser | null
 }
@@ -20,6 +22,7 @@ const UserMenu: React.FC <UserMenuProps> = ({
     //con esto nostraemos desde hooks nuestro registerModal y sus funciones
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
+    const rentModal = useRentModal();
 
     //vamos a usar una funcion para usar algunos estados para la barra de usuario,para saber si se abre o no
     const [isOpen, setIsOpen] = useState(false);
@@ -29,11 +32,18 @@ const UserMenu: React.FC <UserMenuProps> = ({
         setIsOpen((value) => !value);
     }, []);
 
+    const onRent = useCallback(() => {
+        if (!currentUser) {
+            return loginModal.onOpen();
+        }
+        rentModal.onOpen();
+    }, [currentUser, loginModal, rentModal]);
+
     return (
         <div className="relative">
             <div className="flex flex-row items-center gap-3">
                 <div
-                    onClick={() => {}}
+                    onClick={onRent}
                     className="
                         hidden
                         md:block
@@ -109,7 +119,7 @@ const UserMenu: React.FC <UserMenuProps> = ({
                                     label='My properties'
                                 />
                                 <MenuItem 
-                                    onClick={() => {}}
+                                    onClick={rentModal.onOpen}
                                     label='Airbnb my home'
                                 />
                                 <hr />

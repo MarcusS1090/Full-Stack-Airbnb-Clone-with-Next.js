@@ -62,6 +62,11 @@ const RegisterModal = () => {
             setIsLoading(false);
         })
     }
+    //aqui vamos a hacer para cambiar entre login y register model2
+    const toggle = useCallback(() => {
+        loginModal.onOpen();
+        registerModal.onClose();
+    }, [loginModal, registerModal]);
     //aqui vamos a crear nuestro contenido para el body del registro
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -122,7 +127,7 @@ const RegisterModal = () => {
             >
                 <p>¿Already have an account?
                     <span 
-                        onClick={registerModal.onClose} 
+                        onClick={toggle} 
                         className="
                         text-neutral-800
                         cursor-pointer 
