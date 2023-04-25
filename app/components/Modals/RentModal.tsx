@@ -8,6 +8,8 @@ import Heading from "../Heading";
 import { categories } from "../NavBar/Categories"
 import CategoryInput from "../Inputs/CategoryInput";
 import { FieldValues, useForm } from "react-hook-form";
+import CountrySelect from "../Inputs/CountrySelect";
+import dynamic from "next/dynamic";
 
 /*
 AQUI VAMOS A TENER UN ENUM para nuestro Rentmodal, esto nos ayudara a la hora de obtener la informacion
@@ -54,7 +56,11 @@ const RentModal = () => {
 
     //aqui usamos un watch para ver que se catagoria se selecciona
     const category = watch('category');
+    const location = watch('location');
 
+    const Map = useMemo(() => dynamic(() => import('../Map'), {
+        ssr: false
+    }), [location]);
     /*
     aqui hacemos un setValue custom por que en react hook setValue por defecto no reenderiza la pagina
     asi que tenemos que darle otros valores
@@ -121,11 +127,32 @@ const RentModal = () => {
 
         </div>
     )
+
+    if (step === STEPS.LOCATION) {
+        bodyContent = (
+            <div
+                className=" flex flex-col gap-8"
+            >
+                <Heading    
+                    title="Where is your place located?"
+                    subtitle="Help guest find you!"
+                />
+                <CountrySelect
+                    value={location}
+                    onChange={(value) => setCustomValue('location', value)}
+                />
+                <Map
+                    center={location?.latlng}
+                />
+            </div>
+        )
+    }
+
     return (
         <Modal
             isOpen={rentModal.isOpen}
             onClose={rentModal.onClose}
-            onSubmit={rentModal.onClose}
+            onSubmit={onNext}
             actionLabel={actionLabel}
             secondaryActionLabel={secondaryActionLabel}
             secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
