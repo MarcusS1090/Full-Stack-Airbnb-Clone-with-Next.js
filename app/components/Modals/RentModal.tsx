@@ -1,15 +1,17 @@
 'use client';
 
 import useRentModal from "@/app/hooks/useRentModal";
+import dynamic from "next/dynamic";
+import { FieldValues, useForm } from "react-hook-form";
+import { useMemo, useState } from "react";
 
 import Modal from "./Modal";
-import { useMemo, useState } from "react";
 import Heading from "../Heading";
 import { categories } from "../NavBar/Categories"
 import CategoryInput from "../Inputs/CategoryInput";
-import { FieldValues, useForm } from "react-hook-form";
 import CountrySelect from "../Inputs/CountrySelect";
-import dynamic from "next/dynamic";
+import Counter from "../Inputs/Counter";
+import ImageUpload from "../Inputs/ImageUpload";
 
 /*
 AQUI VAMOS A TENER UN ENUM para nuestro Rentmodal, esto nos ayudara a la hora de obtener la informacion
@@ -56,7 +58,17 @@ const RentModal = () => {
 
     //aqui usamos un watch para ver que se catagoria se selecciona
     const category = watch('category');
+    //para poder importar Map.
     const location = watch('location');
+    //para poder obtener el conteo de guest
+    const guestCount = watch('guestCount');
+    //para obtener el conteo de cuartos
+    const roomCount = watch('roomCount');
+    //para obtener el conteo de baños
+    const bathroomCount = watch('bathroomCount');
+    //para obtener la imagen de la casa
+    const imageSrc = watch('imageSrc');
+
 
     const Map = useMemo(() => dynamic(() => import('../Map'), {
         ssr: false
@@ -73,7 +85,7 @@ const RentModal = () => {
         });
     }
 
-    //las funciones para saber si volvemos o o retrocedemos
+    //las funciones para saber si volvemos o retrocedemos
     const onBack = () => {
         setStep((value) => value - 1);
     };
@@ -127,7 +139,7 @@ const RentModal = () => {
 
         </div>
     )
-
+    //este es el paso para esocger localizacion
     if (step === STEPS.LOCATION) {
         bodyContent = (
             <div
@@ -143,6 +155,53 @@ const RentModal = () => {
                 />
                 <Map
                     center={location?.latlng}
+                />
+            </div>
+        )
+    }
+    //este es el siguiente paso para registrar nuestro hogar como airbnb
+    if (step === STEPS.INFO) {
+        bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading 
+                    title="Share some basics about your place"
+                    subtitle="What amenities do you have?"
+                />
+                <hr />
+                <Counter
+                    title="Guest"
+                    subtitle="How many guest do you allow?"
+                    value={guestCount}
+                    onChange={(value) => setCustomValue('guestCount', value)}
+                />
+                <hr />
+                <Counter
+                    title="Rooms"
+                    subtitle="How many rooms do you have?"
+                    value={roomCount}
+                    onChange={(value) => setCustomValue('roomCount', value)}
+                />
+                <hr />
+                <Counter
+                    title="Bathrooms"
+                    subtitle="How many bathrooms do you have?"
+                    value={bathroomCount}
+                    onChange={(value) => setCustomValue('bathroomCount', value)}
+                />
+            </div>
+        )
+    }
+    //este es el paso para poner una imagen
+    if (step === STEPS.IMAGES) {
+        bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading 
+                    title="Add a photo of your place"
+                    subtitle="Show guests waht your place looks like!"
+                />
+                <ImageUpload 
+                    value={imageSrc}
+                    onChange={(value) => setCustomValue('imageSrc', value)}
                 />
             </div>
         )
