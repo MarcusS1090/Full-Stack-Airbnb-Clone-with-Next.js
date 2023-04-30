@@ -2,7 +2,7 @@
 
 import useRentModal from "@/app/hooks/useRentModal";
 import dynamic from "next/dynamic";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 
 import Modal from "./Modal";
@@ -12,6 +12,11 @@ import CategoryInput from "../Inputs/CategoryInput";
 import CountrySelect from "../Inputs/CountrySelect";
 import Counter from "../Inputs/Counter";
 import ImageUpload from "../Inputs/ImageUpload";
+import Input from "../Inputs/Input";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 
 /*
 AQUI VAMOS A TENER UN ENUM para nuestro Rentmodal, esto nos ayudara a la hora de obtener la informacion
@@ -27,8 +32,10 @@ enum STEPS {
 }
 
 const RentModal = () => {
+    const router = useRouter();
     const rentModal = useRentModal();
 
+    const [isLoading, setIsLoading] = useState(false);
     const [step, setStep] = useState(STEPS.CATEGORY );
     //aqui vamos a hacer nuestras variables para nuestro formulario hook,tal como lo hicimos en el login
     const {
@@ -85,15 +92,40 @@ const RentModal = () => {
         });
     }
 
-    //las funciones para saber si volvemos o retrocedemos
+    //la funcion para saber si volvemos o retrocedemos
     const onBack = () => {
         setStep((value) => value - 1);
     };
-
+    //la funcion para saber si vamos al siguiente paso
     const onNext = () => {
         setStep((value) => value + 1);
     }
 
+    //funcion para un onSubmit button
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        //una condicion que sirve para ver si no estamos en el precio
+        //entonces nos deje avanzar mientras no estemos en el ultimo paso que es price
+        if (step !== STEPS.PRICE) {
+            return onNext();
+        }
+        //en caso de que estemos en el ultimo paso que es price entonces que cargue
+        setIsLoading(true);
+        //hacemos una peticion a la api para saber si todos los datos estan llenos correctament
+        axios.post('/api/listings', data)
+        .then(() => {
+            toast.success('Listing Created!');
+            router.refresh();
+            reset();
+            setStep(STEPS.CATEGORY);
+            rentModal.onClose();
+        })
+        .catch(() => {
+            toast.error('Something went wrong.');
+        })
+        .finally(() => {
+            setIsLoading(false);
+        })
+    }
     const actionLabel = useMemo(() => {
         if( step === STEPS.PRICE){
             return 'create'; 
@@ -159,7 +191,7 @@ const RentModal = () => {
             </div>
         )
     }
-    //este es el siguiente paso para registrar nuestro hogar como airbnb
+    //este es el siguiente paso para info de nuestro airbnb
     if (step === STEPS.INFO) {
         bodyContent = (
             <div className="flex flex-col gap-8">
@@ -206,12 +238,61 @@ const RentModal = () => {
             </div>
         )
     }
+    //este es el paso de la descripcion airbnb
+    if (step === STEPS.DESCRIPTION) {
+        bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading 
+                    title="How would you describe your place?"
+                    subtitle="Short and sweet works best!"
+                />
+                <Input 
+                    id="title"
+                    label="Title"
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                />
+                <hr />
+                <Input 
+                    id="description"
+                    label="Description"
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                />
+            </div>
+        )
+    }
+    //este es el paso para el precio de aribnb
+    if (step === STEPS.PRICE) {
+        bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading 
+                    title="Now,set your price"
+                    subtitle="How much do you charge per night?"
+                />
+                <Input 
+                    id="price"
+                    label="Pirce"
+                    formatPrice
+                    type="number"
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                />
+            </div>
+        )
+    }
 
     return (
         <Modal
             isOpen={rentModal.isOpen}
             onClose={rentModal.onClose}
-            onSubmit={onNext}
+            onSubmit={handleSubmit(onSubmit)}
             actionLabel={actionLabel}
             secondaryActionLabel={secondaryActionLabel}
             secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
