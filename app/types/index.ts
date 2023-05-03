@@ -1,7 +1,14 @@
-import { User } from "@prisma/client";
+import { Listing, User } from "@prisma/client";
 
+//fix para error en el servidor
+export type safeListings = Omit<
+    Listing,
+    "createdAt"
+> &{
+    createdAt: string;
+} 
 
-export type safeUser = Omit<
+export type SafeUser = Omit<
 User,
 "createdAt" | "updatedAt" | "emailVerified"
 > & {

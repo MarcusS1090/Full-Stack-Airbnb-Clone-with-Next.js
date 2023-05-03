@@ -12,11 +12,7 @@ import RegisterModal from "./components/Modals/RegisterModal";
 import LoginModal from "./components/Modals/LoginModal";
 import RentModal from "./components/Modals/RentModal";
 
-
 import ToasterProvider from "./providers/ToasterProvider";
-
-
-
 
 export const metadata = {
   title: 'Airbnb-clone',

@@ -1,7 +1,7 @@
 'use client'
 
 import useCountries from "@/app/hooks/useCountries";
-import { safeUser } from "@/app/types";
+import { SafeUser, safeListings } from "@/app/types";
 import { Listing, Reservation } from "@prisma/client";
 
 import { useRouter } from "next/navigation";
@@ -12,13 +12,13 @@ import HeartButton from "../HeartButton";
 import Button from "../Button";
 
 interface ListingCardProps {
-    data: Listing;
+    data: safeListings;
     reservation?: Reservation;
     onAction?: (id: string) => void;
     disabled?: boolean;
     actionLabel?: string;
     actionId?: string;
-    currentUser?: safeUser | null;
+    currentUser?: SafeUser | null;
 }
 
 const ListingCard: React.FC<ListingCardProps> =({ 
@@ -96,7 +96,7 @@ const ListingCard: React.FC<ListingCardProps> =({
                             object-cover
                             h-full
                             w-full
-                            group-hover:scale-120
+                            group-hover:scale-110
                             transition
                         "
                     />
@@ -134,4 +134,4 @@ const ListingCard: React.FC<ListingCardProps> =({
     )
 }
 
-export default ListingCard
+export default ListingCard;

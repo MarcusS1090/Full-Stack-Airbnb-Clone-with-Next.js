@@ -1,6 +1,4 @@
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import styles from './page.module.css'
 import ClientOnly from './components/ClientOnly'
 import Container from './components/Container'
 import EmptyState from './components/EmptyState'
@@ -38,7 +36,7 @@ export default async function Home() {
             gap-8 
           '
         >
-          {listings.map((listing: any) => {
+          {listings.map((listing) => {
             return (
               <ListingCard 
                 currentUser={currentUser}
