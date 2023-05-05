@@ -9,8 +9,7 @@ import ListingReservation from "@/app/components/listings/ListingReservation";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 
-import { SafeUser, safeListings } from "@/app/types";
-import { Reservation } from "@prisma/client";
+import { SafeUser, safeListings, safeReservations } from "@/app/types";
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -24,9 +23,9 @@ const initialDateRange = {
     key: 'selection'
 };
 interface ListingClientProps {
-    reservations?: Reservation[];
+    reservations?: safeReservations[];
     listing: safeListings & {
-        user: SafeUser
+        user: SafeUser;
     };
     currentUser?: SafeUser | null;
 }
@@ -94,7 +93,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
     //VAMOS A cambiar los precios dependiendo de las fechas
     useEffect(() => {
-        if (dateRange && dateRange.endDate) {
+        if (dateRange.startDate && dateRange.endDate) {
             const dayCount = differenceInCalendarDays(
                 dateRange.endDate,
                 dateRange.startDate
