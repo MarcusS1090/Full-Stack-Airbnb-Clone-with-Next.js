@@ -6,20 +6,22 @@ import Avatar from "../Avatar";
 import React, { useCallback, useState } from 'react';
 import MenuItem from './MenuItem';
 import { signOut } from 'next-auth/react';
-import { safeUser } from '@/app/types'
+import { SafeUser } from '@/app/types'
 
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 import useRentModal from '@/app/hooks/useRentModal';
+import { useRouter } from 'next/navigation';
 
 interface UserMenuProps {
-    currentUser?: safeUser | null
+    currentUser?: SafeUser | null
 }
 
 const UserMenu: React.FC <UserMenuProps> = ({
     currentUser
 }) => {
     //con esto nostraemos desde hooks nuestro registerModal y sus funciones
+    const router = useRouter();
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
     const rentModal = useRentModal();
@@ -103,7 +105,7 @@ const UserMenu: React.FC <UserMenuProps> = ({
                         {currentUser ? (
                             <>
                                 <MenuItem 
-                                    onClick={() => {}}
+                                    onClick={() => router.push("/trips")}
                                     label='My trips'
                                 />
                                 <MenuItem 
