@@ -52,11 +52,12 @@ const RegisterModal = () => {
         //por ahora solo vamos a crear la UI pero aun asi vamos a usar axios post
         axios.post('/api/register', data)
         .then(() => {
-            toast.success("Registrado!");
+            toast.success('Success!');
+            loginModal.onOpen();
             registerModal.onClose();
         })
         .catch((error) => {
-            toast.error('Algo salío mal');
+            toast.error('Something went wrong');
         })
         .finally(() => {
             setIsLoading(false);

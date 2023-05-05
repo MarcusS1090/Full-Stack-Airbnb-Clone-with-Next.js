@@ -9,7 +9,7 @@ import ListingReservation from "@/app/components/listings/ListingReservation";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 
-import { SafeUser, safeListings, safeReservations } from "@/app/types";
+import { SafeUser, SafeListings, SafeReservations } from "@/app/types";
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -23,8 +23,8 @@ const initialDateRange = {
     key: 'selection'
 };
 interface ListingClientProps {
-    reservations?: safeReservations[];
-    listing: safeListings & {
+    reservations?: SafeReservations[];
+    listing: SafeListings & {
         user: SafeUser;
     };
     currentUser?: SafeUser | null;
