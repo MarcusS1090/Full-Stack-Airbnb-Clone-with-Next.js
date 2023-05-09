@@ -10,12 +10,12 @@ import Container from "../Container";
 import Search from "./Search";
 import Logo from "./Logo"
 import UserMenu from "./UserMenu";
-import { safeUser } from "@/app/types"
+import { SafeUser } from "@/app/types"
 import Categories from "./Categories";
 
 
 interface NavBarProps {
-    currentUser?: safeUser | null;
+    currentUser?: SafeUser | null;
 }
 
 const NavBar: React.FC<NavBarProps> = ({
