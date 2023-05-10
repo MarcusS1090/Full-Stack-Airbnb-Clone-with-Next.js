@@ -23,8 +23,8 @@ export const authOptions: AuthOptions = {
         CredentialsProvider({
             name: 'credentials',
             credentials: {
-            email: { label: 'email', type: 'text' },
-            password: { label: 'password', type: 'password' },
+                email: { label: 'email', type: 'text' },
+                password: { label: 'password', type: 'password' }
             },
             //si el usuario olvida su email o su contraseña entonces le saldra un
             //error de que esta teniendo algun error en una de esta
@@ -37,14 +37,14 @@ export const authOptions: AuthOptions = {
                 // en este caso son las credenciales del email
                 const user = await prisma.user.findUnique({
                     where: {
-                    email: credentials.email
+                        email: credentials.email
                     }
                 });
                 // si el usuario no puede ser encontrado entonces hacemos una condicional
                 // si no hay usuario y si la contraseña no  coincide con el usuario entonces
                 // le pasamos un error
                 if (!user || !user?.hashedPassword) {
-                    throw new Error('Invalid user');
+                    throw new Error('Invalid credentials');
                 }
 
                 // si la contraseña es correcta entonces 
@@ -55,7 +55,7 @@ export const authOptions: AuthOptions = {
                 );
                 //aqui hacemos un pequeño condicional si la contraseña es incorrecta
                 if (!isCorrectPassword) {
-                    throw new Error('Incorrect password');
+                    throw new Error('Invalid credentials');
                 }
 
                 return user;
@@ -71,9 +71,9 @@ export const authOptions: AuthOptions = {
     // para ver errores
     debug: process.env.NODE_ENV === 'development',
     session: {
-        strategy: "jwt"
+        strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET,
 }
 
-export default NextAuth(authOptions); 
+export default NextAuth(authOptions);
