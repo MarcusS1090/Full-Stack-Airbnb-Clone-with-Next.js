@@ -1,6 +1,5 @@
 
 import prisma from '@/app/libs/prismadb';
-import { start } from 'repl';
 
 export interface IListingsParams {
     userId?: string;
@@ -55,13 +54,6 @@ export default async function getListings(
             }
         }
 
-        const listings = await prisma.listing.findMany({
-            where: query,
-            orderBy: {
-                createdAt: 'desc'
-            }
-        });
-
         if (locationValue) {
             query.locationValue = locationValue;
         }
@@ -85,6 +77,13 @@ export default async function getListings(
                 }
             }
         }
+
+        const listings = await prisma.listing.findMany({
+            where: query,
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
 
         const safeListings = listings.map((listing) => ({
             ...listing,
