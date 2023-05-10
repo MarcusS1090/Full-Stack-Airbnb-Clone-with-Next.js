@@ -79,7 +79,7 @@ const RentModal = () => {
 
     const Map = useMemo(() => dynamic(() => import('../Map'), {
         ssr: false
-    }), [location]);
+    }), []);
     /*
     aqui hacemos un setValue custom por que en react hook setValue por defecto no reenderiza la pagina
     asi que tenemos que darle otros valores
