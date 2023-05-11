@@ -15,7 +15,6 @@ import ImageUpload from "../Inputs/ImageUpload";
 import Input from "../Inputs/Input";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { Router } from "next/router";
 import { useRouter } from "next/navigation";
 
 /*

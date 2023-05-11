@@ -13,19 +13,19 @@ export interface IListingsParams {
 }
 
 export default async function getListings(
-    params: IListingsParams
-) {
-    try{
-        const {
-            userId,
-            guestCount,
-            roomCount,
-            bathroomCount,
-            startDate,
-            endDate,
-            locationValue,
-            category,
-        } = params;
+        params: IListingsParams
+    ) {
+        try {
+            const {
+                userId,
+                roomCount, 
+                guestCount, 
+                bathroomCount, 
+                locationValue,
+                startDate,
+                endDate,
+                category,
+            } = params;
 
         let query: any = {};
 
@@ -42,6 +42,7 @@ export default async function getListings(
                 gte: +roomCount
             }
         }
+
         if (guestCount) {
             query.guestCount = {
                 gte: +guestCount
@@ -61,12 +62,12 @@ export default async function getListings(
         //con esto filtramos que no haya problemas al hacer reservaciones en la DB
         if (startDate && endDate) {
             query.NOT = {
-                reservations : {
+                reservations: {
                     some: {
                         OR: [
                             {
-                                endDate: {gte: startDate},
-                                startDate: {lte: startDate },
+                                endDate: { gte: startDate },
+                                startDate: { lte: startDate }
                             },
                             {
                                 startDate: { lte: endDate },
@@ -80,9 +81,9 @@ export default async function getListings(
 
         const listings = await prisma.listing.findMany({
             where: query,
-            orderBy: {
-                createdAt: 'desc'
-            }
+                orderBy: {
+                    createdAt: 'desc'
+                }
         });
 
         const safeListings = listings.map((listing) => ({
