@@ -11,8 +11,8 @@ declare global {
 aqui creamos una constante cliente para que nos muestre prisma de manera global
 o que nos cree un nuevo PrismaClient 
 */
-const client = globalThis.prisma || new PrismaClient();
+const client = globalThis.prisma || new PrismaClient()
 //esta condicion nos sirve para ver que no estemos en produccion
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = client
+if (process.env.NODE_ENV !== "production") globalThis.prisma = client
 
 export default client;
